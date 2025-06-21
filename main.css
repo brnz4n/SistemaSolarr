@@ -1,0 +1,155 @@
+
+HTML CSS JS 
+
+    Result
+    Skip Results Iframe
+
+EDIT ON
+
+* {
+  font-family: monospace;
+}
+
+#info {
+  position: fixed;
+  top: 3%;
+  left: 35%;
+  right: 35%;
+  background-color: hsla(0, 0%, 93%, 0.65); /* cinza claro translúcido */
+  color: #000;
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 18px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+}
+
+#dropdown {
+  position: absolute;
+  z-index: 1;
+  margin-top: 2rem;
+  margin-left: 2rem;
+}
+
+#dropdown button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  background-color: #373737;
+  color: #d4d4d4;
+}
+
+#dropdown button:hover {
+  background-color: #0e0e0e;
+  color: white;
+}
+
+#dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 20em;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+#dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+#dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+#dropdown:hover #dropdown-content {
+  display: block;
+}
+
+#commandHelp {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 220px;
+  background-color: rgba(200, 200, 200, 0.65); /* cinza claro translúcido */
+  color: #000;
+  font-family: sans-serif;
+  font-size: 14px;
+  padding: 15px;
+  border-radius: 10px;
+  z-index: 9999;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+#commandHelp h3 {
+  margin-top: 0;
+  font-size: 16px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 5px;
+}
+
+#commandHelp ul {
+  padding-left: 18px;
+  margin: 10px 0 0 0;
+}
+
+#meuLink {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: rgba(200, 200, 200, 0.65);
+  padding: 10px 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  font-family: sans-serif;
+  font-size: 12px;
+  z-index: 9999;
+}
+
+#meuLink a {
+  color: #000;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#meuLink a:hover {
+  text-decoration: underline;
+}
+
+#tooltip {
+    position: absolute;
+    background: rgba(255,255,255,0.9);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-family: sans-serif;
+    font-size: 13px;
+    pointer-events: none;
+    color: #000;
+    display: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+#year-counter {
+  position: fixed;
+  top: 9%; /* Mantém a 9% do topo */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translateX(-50%); /* Ajusta para um perfeito centralizamento */
+  width: auto; /* Permite que o conteúdo dite a largura, ou defina uma largura máxima */
+  max-width: 200px; /* Exemplo: Define uma largura máxima */
+  background-color: hsla(0, 0%, 93%, 0.65);
+  color: #000;
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 15px; /* Tamanho da fonte reduzido */
+  font-weight: bold;
+  padding: 8px 12px; /* Preenchimento ligeiramente reduzido */
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+}
+
