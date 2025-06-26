@@ -262,6 +262,7 @@ earthGroup.add(cloudMesh);
 const moonOrbit = new THREE.Object3D();
 moonOrbit.position.set(40, 0, 0); // Orbitando a Terra
 earthOrbit.add(moonOrbit); // Lua orbita Terra que orbita Sol
+earthOrbit.rotation.y += 0.001*g;
 
 // Lua
 const moonTexture = textureLoader.load("textures/Lua.jpg");
@@ -412,15 +413,16 @@ const planetObjects = [
     MercuryMesh, VenusMesh, worldMesh, marsMesh,
     JupiterMesh, SaturnMesh, UranoMesh, NeptuneMesh
 ];
+
 const planetNames = {
-    [MercuryMesh.uuid]: "1° - Mercúrio",
-    [VenusMesh.uuid]: "2° - Vênus",
-    [worldMesh.uuid]: "3° - Terra",
-    [marsMesh.uuid]: "4° - Marte",
-    [JupiterMesh.uuid]: "5° - Júpiter",
-    [SaturnMesh.uuid]: "6° - Saturno",
-    [UranoMesh.uuid]: "7° - Urano",
-    [NeptuneMesh.uuid]: "8° - Netuno"
+    [MercuryMesh.uuid]: "1° - Mercúrio:\nO menor planeta e o mais\npróximo do Sol. Não possui\natmosfera significativa e tem\nvariações extremas de temperatura.",
+    [VenusMesh.uuid]: "2° - Vênus:\nSemelhante em tamanho à Terra,\nmas com atmosfera densa e quente\ndevido ao efeito estufa intenso.",
+    [worldMesh.uuid]: "3° - Terra:\nNosso lar. O único planeta com\nvida conhecida. Possui água líquida\ne atmosfera rica em oxigênio.",
+    [marsMesh.uuid]: "4° - Marte:\nChamado de 'planeta vermelho'.\nTem calotas polares, montanhas\ngigantes e sinais de água antiga.",
+    [JupiterMesh.uuid]: "5° - Júpiter:\nO maior planeta do Sistema Solar.\nGigante gasoso com uma Grande\nMancha Vermelha e muitas luas.",
+    [SaturnMesh.uuid]: "6° - Saturno:\nFamoso por seus anéis feitos de\ngelo e poeira. Também possui\nmuitas luas ao seu redor.",
+    [UranoMesh.uuid]: "7° - Urano:\nGigante gelado com coloração\nazul-esverdeada. Gira quase\ndeitado em relação ao Sol.",
+    [NeptuneMesh.uuid]: "8° - Netuno:\nO mais distante do Sol.\nPossui ventos poderosos e\numa atmosfera azul intensa."
 };
 
 // malha pra ajudar a localização do eixo
@@ -487,23 +489,30 @@ const orbitNeptune = createOrbitLine(180, 128, 0x8899ff);
 scene.add(orbitNeptune);
 
 // Loop de animação
+let passouPorZero = true;
+
 function animate() {
     requestAnimationFrame(animate);
 
     // Rotação e posição dos planetas
-    MercuryMesh.rotation.y += 0.0005;
+    MercuryMesh.rotation.y += 0.001;
     MercuryObj.rotation.y += 0.0047*g;
     VenusObj.rotation.y += 0.0035*g;
+    VenusMesh.rotation.y += -0.001;
     marsObj.rotation.y += 0.0005*g;
+    marsMesh.rotation.y += 0.007;
     VenusMesh.rotation.y += -0.0001;
     JupiterObj.rotation.y += 0.0002*g;
+    JupiterMesh.rotation.y += 0.003;
     SaturnMesh.rotation.y += 0.0025;
     SaturnObj.rotation.y += 0.00010*g;
     UranoMesh.rotation.y += -0.002;
     UranoOrbit.rotation.y += -0.00007*g;
     NeptuneObj.rotation.y += 0.00003*g;
+    NeptuneMesh.rotation.y += 0.002;
     cloudMesh.rotation.y -= 0.005;
-    earthOrbit.rotation.y += 0.001*g;
+    worldMesh.rotation.y += 0.002;
+
     moonOrbit.rotation.y += 0.002*g;
     marsMesh.rotation.y += 0.0005;
 
@@ -549,15 +558,28 @@ function animate() {
     // Translação da Terra
 earthOrbit.rotation.y += 0.001 * g;
 
-// Chegou a uma volta completa?
-const currentRotation = earthOrbit.rotation.y % (Math.PI * 2); // mantém entre 0 e 2π
-const lastRotation = lastEarthRotation % (Math.PI * 2);
+// Normaliza a rotação atual entre 0 e 2π
+const normalizedRotation = (earthOrbit.rotation.y % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
 
-// Detecta quando passou de uma volta completa (de 2π pra 0)
-if (currentRotation < lastRotation) {
-  earthYears += 1;
-  console.log(`Ano ${earthYears}`);
+// Detecta a passagem pela origem
+if (!passouPorZero && normalizedRotation < 0.1) {
+    if (g > 0) {
+        earthYears += 1;
+    } else if (g < 0) {
+        earthYears -= 1;
+    }
+    console.log(`Ano ${earthYears}`);
+    passouPorZero = true;
 }
+
+// Libera a trava depois que já passou bem longe do zero
+if (normalizedRotation > 1.0) {
+    passouPorZero = false;
+}
+
+
+
+
 
 // Atualiza valor antigo para próxima comparação
 lastEarthRotation = earthOrbit.rotation.y;
