@@ -1,7 +1,7 @@
 import * as THREE from 'https://unpkg.com/three@0.155.0/build/three.module.js';
 import { OrbitControls } from "https://esm.sh/three/addons/controls/OrbitControls.js";
 
-// ATUALIZAÇÂO 1.2.0 quase mec
+// ATUALIZAÇÂO 1.5.2 
 
 // fazendo aparecer uma linha branca nos planetas quando passar o mouse
 const raycaster = new THREE.Raycaster();
@@ -46,7 +46,7 @@ window.addEventListener("mousemove", (event) => {
 // constantes para ajudar nos eventos
 const defaultCameraPos = new THREE.Vector3(40, 60, 370);
 const defaultTarget = new THREE.Vector3(0, 0, 0);
-var g =1;
+var g = 1;
 
 // comandos
 window.addEventListener("keydown", (event) => {
@@ -57,7 +57,6 @@ window.addEventListener("keydown", (event) => {
     controls.update();
   }
   if(event.key.toLowerCase() === "d"){
-  //  marsObj.rotation.y = 0; //para acelerar/desacelerar individual
     g-=0.5;  //para todos
   }
   if(event.key.toLowerCase() === "r"){
@@ -79,7 +78,7 @@ let camera = new THREE.PerspectiveCamera(
     30,
     window.innerWidth / window.innerHeight,
     0.5,
-    3000 // menor far = mais precisão de profundidade
+    3000 
 
 );
 camera.position.set(40, 60, 370); // começa em um frame legalzin
@@ -131,11 +130,6 @@ window.addEventListener("keydown", (event) => {
             return;     
     }
     
-if (positionatual) {
-        camera.position.set(target.x + 30, target.y + 20, target.z + 30);
-        controls.target.copy(target);
-        controls.update();
-    }
 });
 let render = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 render.setSize(window.innerWidth, window.innerHeight);
@@ -169,7 +163,6 @@ const sunObj = new THREE.Object3D();
 sunObj.add(sunMesh);
 scene.add(sunObj);
 sunMesh.position.set(0, 0, 0);
-sunMesh.rotation.y += 0.001; // rotação própria do sol
 
 // segundo sol para tentar dar um efeito legal no projeto
 const sun2Texture = textureLoader.load("textures/Sol.jpg");
@@ -203,7 +196,6 @@ MercuryMesh.position.set(20, 0, 0); // 20 unidades de distância do Sol
 const MercuryObj = new THREE.Object3D();
 MercuryObj.add(MercuryMesh);
 scene.add(MercuryObj);
-//MercuryMesh.rotation.y += 0.0005; // rotação própria de mercúrio
 
 // Venus
 const VenusTexture = textureLoader.load("textures/Venus.jpg");
@@ -219,7 +211,6 @@ VenusMesh.position.set(30, 0, 0);  //30 unidades de distancia do sol
 const VenusObj = new THREE.Object3D();
 VenusObj.add(VenusMesh);
 scene.add(VenusObj);
-VenusMesh.rotation.y += -0.0001; // rotação própria de Venus, obs: a rotaçao de venus é ao contrario, por isso o menos
 
 // Terra (Grupo que fará a Terra orbitar o Sol) 
 let lastEarthRotation = 0;
@@ -251,6 +242,7 @@ const cloudGeometry = new THREE.SphereGeometry(1.05, 32, 32);
 const cloudMaterial = new THREE.MeshBasicMaterial({
     map: cloudTexture,
     transparent: true,
+    opacity: 0.8,
     depthTest: true,
     depthWrite: false
 });
@@ -262,7 +254,6 @@ earthGroup.add(cloudMesh);
 const moonOrbit = new THREE.Object3D();
 moonOrbit.position.set(40, 0, 0); // Orbitando a Terra
 earthOrbit.add(moonOrbit); // Lua orbita Terra que orbita Sol
-earthOrbit.rotation.y += 0.001*g;
 
 // Lua
 const moonTexture = textureLoader.load("textures/Lua.jpg");
@@ -276,7 +267,6 @@ const moonMaterial = new THREE.MeshStandardMaterial({
 const moonMesh = new THREE.Mesh(moonGeometry, moonMaterial);
 moonMesh.position.set(2, 0, 0); // Distância da Terra
 moonOrbit.add(moonMesh);
-
 
 // Marte
 const marsTexture = textureLoader.load("textures/Marte.jpg");
@@ -292,7 +282,53 @@ marsMesh.position.set(50, 0, 0);
 const marsObj = new THREE.Object3D();
 marsObj.add(marsMesh);
 scene.add(marsObj);
-marsMesh.rotation.y += 0.0008; //rotação própria de Marte
+
+const MarsGroup = new THREE.Object3D();
+
+const marsOrbit = new THREE.Object3D();
+marsOrbit.add(MarsGroup);
+scene.add(marsOrbit);
+
+MarsGroup.add(marsObj); // assim marte e suas luas giram juntos
+
+// Órbita de Fobos ao redor de Marte
+const FobosOrbit = new THREE.Object3D();
+FobosOrbit.position.set(50, 0, 0); // mesma posição de Marte
+MarsGroup.add(FobosOrbit);
+
+// Fobos (lua de Marte)
+const FobosTexture = textureLoader.load("textures/Lua.jpg");
+const FobosGeometry = new THREE.SphereGeometry(0.15, 32, 32);
+const FobosMaterial = new THREE.MeshStandardMaterial({
+    map: FobosTexture,
+    map: FobosTexture,
+    depthTest: true,
+    depthWrite: true,
+    transparent: false
+});
+const FobosMesh = new THREE.Mesh(FobosGeometry, FobosMaterial);
+FobosMesh.position.set(1.5, 0, 0); // distância de Marte
+FobosOrbit.add(FobosMesh);
+
+// Órbita de Deimos ao redor de Marte
+const DeimosOrbit = new THREE.Object3D();
+DeimosOrbit.position.set(50, 0, 0); // mesma posição de Marte
+MarsGroup.add(DeimosOrbit);
+
+// Deimos (segunda lua de Marte)
+const DeimosTexture = textureLoader.load("textures/Lua.jpg");
+const DeimosGeometry = new THREE.SphereGeometry(0.10, 32, 32);
+const DeimosMaterial = new THREE.MeshStandardMaterial({
+    map: DeimosTexture,
+map: FobosTexture,
+    depthTest: true,
+    depthWrite: true,
+    transparent: false
+});
+const DeimosMesh = new THREE.Mesh(DeimosGeometry, DeimosMaterial);
+DeimosMesh.position.set(2.3, 0, 0); // um pouco mais longe que Fobos
+DeimosOrbit.add(DeimosMesh);
+
 
 // Jupiter
 const JupiterTexture = textureLoader.load("textures/Jupiter.jpg");
@@ -308,7 +344,6 @@ JupiterMesh.position.set(75,0,0);
 const JupiterObj = new THREE.Object3D();
 JupiterObj.add(JupiterMesh);
 scene.add(JupiterObj);
-JupiterMesh.rotation.y += 0.0025;  //rotação propria de jupiter
 
 //Saturno
 const SaturnTexture = textureLoader.load("textures/Saturno.jpg");
@@ -338,7 +373,7 @@ const SaturnRingMaterial = new THREE.MeshStandardMaterial({
     side: THREE.DoubleSide,
     depthTest: true,
     depthWrite: true,
-    transparent: true // anel deve ser levemente transparente
+    transparent: true // anel levemente transparente
 });
 
 const SaturnRingMesh = new THREE.Mesh(SaturnRingGeometry, SaturnRingMaterial);
@@ -386,7 +421,6 @@ const NeptuneObj = new THREE.Object3D();
 NeptuneObj.add(NeptuneMesh);
 NeptuneObj.position.set(0,0,0);
 scene.add(NeptuneObj);
-NeptuneMesh.rotation.y += 0.4;  //rotação propria de netuno
 
 // OrbitControls
 const controls = new OrbitControls(camera, render.domElement);
@@ -425,18 +459,7 @@ const planetNames = {
     [NeptuneMesh.uuid]: "8° - Netuno:\nO mais distante do Sol.\nPossui ventos poderosos e\numa atmosfera azul intensa."
 };
 
-// malha pra ajudar a localização do eixo
-// const gridHelper = new THREE.GridHelper(10000, 1500);
-// scene.add(gridHelper);
-// gridHelper.material.transparent = true;
-// gridHelper.material.opacity = 0.1;
-
-// const gridHelper2 = new THREE.GridHelper(10000, 10000);
-// scene.add(gridHelper2);
-// gridHelper2.material.transparent = true;
-// gridHelper2.material.opacity = 0.15;
-
-// tentando criar as linhas das orbitas dos planetas
+// criando as linhas das orbitas dos planetas
 function createOrbitLine(radius, segments = 128, color = 0xffffff) {
     const points = [];
     for (let i = 0; i <= segments; i++) {
@@ -495,11 +518,13 @@ function animate() {
     requestAnimationFrame(animate);
 
     // Rotação e posição dos planetas
+    sunMesh.rotation.y += 0.001;
+    earthOrbit.rotation.y += 0.001*g;
     MercuryMesh.rotation.y += 0.001;
     MercuryObj.rotation.y += 0.0047*g;
     VenusObj.rotation.y += 0.0035*g;
     VenusMesh.rotation.y += -0.001;
-    marsObj.rotation.y += 0.0005*g;
+    marsOrbit.rotation.y += 0.0005 * g;
     marsMesh.rotation.y += 0.007;
     VenusMesh.rotation.y += -0.0001;
     JupiterObj.rotation.y += 0.0002*g;
@@ -512,9 +537,12 @@ function animate() {
     NeptuneMesh.rotation.y += 0.002;
     cloudMesh.rotation.y -= 0.005;
     worldMesh.rotation.y += 0.002;
-
-    moonOrbit.rotation.y += 0.002*g;
+    moonOrbit.rotation.y += 0.004*g;
     marsMesh.rotation.y += 0.0005;
+
+    FobosOrbit.rotation.y += 0.01 * g;
+    DeimosOrbit.rotation.y += 0.006 * g;
+
 
     MercuryMesh.position.x = 20;
     worldMesh.position.x = 40;
@@ -534,7 +562,7 @@ function animate() {
         camera.position.set(pos.x, pos.y + 10, pos.z + 40);
         controls.target.copy(pos);
         controls.update();
-}
+    }
 
    // Atualiza silhueta (efeito pulsar)
     pulseTime += 0.01;
@@ -556,35 +584,31 @@ function animate() {
     render.render(scene, camera);
 
     // Translação da Terra
-earthOrbit.rotation.y += 0.001 * g;
+    earthOrbit.rotation.y += 0.001 * g;
 
-// Normaliza a rotação atual entre 0 e 2π
-const normalizedRotation = (earthOrbit.rotation.y % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+    // Normaliza a rotação atual entre 0 e 2π
+    const normalizedRotation = (earthOrbit.rotation.y % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
 
-// Detecta a passagem pela origem
-if (!passouPorZero && normalizedRotation < 0.1) {
-    if (g > 0) {
-        earthYears += 1;
-    } else if (g < 0) {
-        earthYears -= 1;
+    // Detecta a passagem pela origem
+    if (!passouPorZero && normalizedRotation < 0.1) {
+        if (g > 0) {
+            earthYears += 1;
+        } else if (g < 0) {
+            earthYears -= 1;
+        }
+        console.log(`Ano ${earthYears}`);
+        passouPorZero = true;
     }
-    console.log(`Ano ${earthYears}`);
-    passouPorZero = true;
-}
 
-// Libera a trava depois que já passou bem longe do zero
-if (normalizedRotation > 1.0) {
-    passouPorZero = false;
-}
+    // Libera a trava depois que já passou bem longe do zero
+    if (normalizedRotation > 1.0) {
+        passouPorZero = false;
+    }
 
+    // Atualiza valor antigo para próxima comparação
+    lastEarthRotation = earthOrbit.rotation.y;
 
-
-
-
-// Atualiza valor antigo para próxima comparação
-lastEarthRotation = earthOrbit.rotation.y;
-
-document.getElementById('year-counter').textContent = `Ano: ${earthYears}`;
+    document.getElementById('year-counter').textContent = `Ano: ${earthYears}`;
 
 }
 

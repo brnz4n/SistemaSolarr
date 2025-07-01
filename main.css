@@ -139,15 +139,15 @@ EDIT ON
   top: 9%; /* Mantém a 9% do topo */
   left: 50%; /* Centraliza horizontalmente */
   transform: translateX(-50%); /* Ajusta para um perfeito centralizamento */
-  width: auto; /* Permite que o conteúdo dite a largura, ou defina uma largura máxima */
-  max-width: 200px; /* Exemplo: Define uma largura máxima */
+  width: auto;
+  max-width: 200px;
   background-color: hsla(0, 0%, 93%, 0.65);
   color: #000;
   text-align: center;
   font-family: sans-serif;
-  font-size: 15px; /* Tamanho da fonte reduzido */
+  font-size: 15px;
   font-weight: bold;
-  padding: 8px 12px; /* Preenchimento ligeiramente reduzido */
+  padding: 8px 12px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   z-index: 9999;
